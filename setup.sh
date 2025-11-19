@@ -43,6 +43,48 @@ flatpak install -y flathub md.obsidian.Obsidian
 echo "Installing Dropbox..."
 flatpak install -y flathub com.dropbox.Client
 
+# Pin applications to Cosmic desktop taskbar
+echo ""
+echo "Pinning applications to Cosmic desktop taskbar..."
+
+if command -v dconf &> /dev/null; then
+    # Function to add app to favorites if not already present
+    pin_to_taskbar() {
+        local app_desktop=$1
+        local favorites_path="/org/gnome/shell/favorite-apps"
+        
+        # Get current favorites
+        local current_favorites=$(dconf read "$favorites_path" 2>/dev/null || echo "[]")
+        
+        # Check if app is already in favorites
+        if echo "$current_favorites" | grep -q "$app_desktop"; then
+            echo "  $app_desktop is already pinned"
+            return
+        fi
+        
+        # Add app to favorites
+        if [ "$current_favorites" = "[]" ]; then
+            # Empty list, create new one
+            dconf write "$favorites_path" "['$app_desktop']" 2>/dev/null || true
+        else
+            # Append to existing list
+            local new_favorites=$(echo "$current_favorites" | sed "s/\]$/, '$app_desktop']/")
+            dconf write "$favorites_path" "$new_favorites" 2>/dev/null || true
+        fi
+        
+        echo "  Pinned $app_desktop to taskbar"
+    }
+    
+    # Pin Chrome and Obsidian
+    pin_to_taskbar "com.google.Chrome.desktop"
+    pin_to_taskbar "md.obsidian.Obsidian.desktop"
+    
+    echo "Taskbar pinning complete!"
+else
+    echo "  dconf not found. Skipping taskbar pinning."
+    echo "  You can manually pin applications from the application menu."
+fi
+
 echo ""
 echo "Installation complete! The following applications have been installed:"
 echo "  - Google Chrome (com.google.Chrome)"

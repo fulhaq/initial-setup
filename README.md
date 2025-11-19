@@ -75,6 +75,7 @@ chmod +x setup.sh
 After installation, you can launch the applications in several ways:
 
 ### From Application Menu
+
 The applications will appear in your system's application menu.
 
 ### From Command Line
@@ -93,16 +94,21 @@ flatpak run com.dropbox.Client
 ## Troubleshooting
 
 ### Flatpak Not Found
+
 If you see an error that Flatpak is not installed, install it first:
+
 - **Debian/Ubuntu**: `sudo apt install flatpak`
 - **Fedora**: `sudo dnf install flatpak`
 - After installation, you may need to log out and log back in for Flatpak to work properly.
 
 ### Permission Issues
+
 If you encounter permission issues, ensure you have the necessary permissions to install Flatpak applications. Some systems may require additional setup.
 
 ### Flathub Remote Issues
+
 If the Flathub remote cannot be added, you can manually add it:
+
 ```bash
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 ```
@@ -125,4 +131,3 @@ flatpak uninstall com.dropbox.Client
 ## License
 
 This script is provided as-is for personal use.
-
