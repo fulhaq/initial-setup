@@ -8,7 +8,6 @@
 #   curl -sSL https://raw.githubusercontent.com/fulhaq/initial-setup/main/setup.sh -o setup.sh && chmod +x setup.sh && ./setup.sh
 
 # Setup script to install Flatpak applications: Google Chrome, Obsidian, and Dropbox
-# Also installs Cursor editor
 
 set -e  # Exit on error
 
@@ -55,41 +54,6 @@ flatpak install -y flathub md.obsidian.Obsidian
 # Install Dropbox
 echo "Installing Dropbox..."
 flatpak install -y flathub com.dropbox.Client
-
-# Install Cursor
-echo ""
-echo "Installing Cursor editor..."
-CURSOR_DEB_URL="https://www.cursor.com/downloads/cursor-latest_amd64.deb"
-CURSOR_DEB_PATH="/tmp/cursor-latest_amd64.deb"
-
-# Check if we have wget or curl
-if command -v wget &> /dev/null; then
-    echo "Downloading Cursor..."
-    wget -O "$CURSOR_DEB_PATH" "$CURSOR_DEB_URL"
-elif command -v curl &> /dev/null; then
-    echo "Downloading Cursor..."
-    curl -L "$CURSOR_DEB_URL" -o "$CURSOR_DEB_PATH"
-else
-    echo "Error: Neither wget nor curl is available. Cannot download Cursor."
-    exit 1
-fi
-
-# Install the package
-if [ -f "$CURSOR_DEB_PATH" ]; then
-    echo "Installing Cursor package..."
-    sudo dpkg -i "$CURSOR_DEB_PATH" || true
-    
-    # Fix any missing dependencies
-    echo "Fixing dependencies..."
-    sudo apt-get install -f -y
-    
-    # Clean up
-    rm -f "$CURSOR_DEB_PATH"
-    echo "Cursor installation complete!"
-else
-    echo "Error: Failed to download Cursor package."
-    exit 1
-fi
 
 # Pin applications to Cosmic desktop taskbar
 echo ""
@@ -141,11 +105,9 @@ echo "  - gh (GitHub CLI)"
 echo "  - Google Chrome (com.google.Chrome)"
 echo "  - Obsidian (md.obsidian.Obsidian)"
 echo "  - Dropbox (com.dropbox.Client)"
-echo "  - Cursor editor"
 echo ""
 echo "You can launch them from your application menu or run:"
 echo "  flatpak run com.google.Chrome"
 echo "  flatpak run md.obsidian.Obsidian"
 echo "  flatpak run com.dropbox.Client"
-echo "  cursor"
 
