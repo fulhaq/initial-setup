@@ -14,6 +14,18 @@ set -e  # Exit on error
 
 echo "Starting installation process..."
 
+# Add GitHub CLI apt repository
+echo "Adding GitHub CLI repository..."
+sudo mkdir -p -m 755 /etc/apt/keyrings
+wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
+sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+# Install apt packages
+echo "Installing apt packages..."
+sudo apt-get update -y
+sudo apt-get install -y stow eza gh
+
 # Check if flatpak is installed
 if ! command -v flatpak &> /dev/null; then
     echo "Flatpak is not installed. Please install it first:"
@@ -123,6 +135,9 @@ fi
 
 echo ""
 echo "Installation complete! The following applications have been installed:"
+echo "  - stow"
+echo "  - eza"
+echo "  - gh (GitHub CLI)"
 echo "  - Google Chrome (com.google.Chrome)"
 echo "  - Obsidian (md.obsidian.Obsidian)"
 echo "  - Dropbox (com.dropbox.Client)"
