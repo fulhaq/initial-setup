@@ -14,6 +14,11 @@ set -e  # Exit on error
 
 echo "Starting installation process..."
 
+# Install apt packages
+echo "Installing apt packages..."
+sudo apt-get update -y
+sudo apt-get install -y stow eza
+
 # Check if flatpak is installed
 if ! command -v flatpak &> /dev/null; then
     echo "Flatpak is not installed. Please install it first:"
@@ -123,6 +128,8 @@ fi
 
 echo ""
 echo "Installation complete! The following applications have been installed:"
+echo "  - stow"
+echo "  - eza"
 echo "  - Google Chrome (com.google.Chrome)"
 echo "  - Obsidian (md.obsidian.Obsidian)"
 echo "  - Dropbox (com.dropbox.Client)"
